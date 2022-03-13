@@ -1,44 +1,51 @@
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 public class HerokuappTestNG {
 
+    WebDriver driver;
+
+    @BeforeTest
+    public void setup() {
+        System.setProperty("webdriver.chrome.driver", "C:\\WebDrivers\\chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.get("https://the-internet.herokuapp.com/");
+        driver.manage().window().maximize();
+    }
+
     @Test
-    public void TestNG() {
-        System.setProperty("webdriver.chrome.driver",
-                "C:\\WebDrivers\\chromedriver.exe");
-        WebDriver ChromeForHomework1 = new ChromeDriver();
-        ChromeForHomework1.get("https://the-internet.herokuapp.com/");
-        List<WebElement> links = ChromeForHomework1.findElements(By.tagName("a"));
+    public void clickAndAlertsHomework() {
+
+        // Задание - кликнуть на 8ую ссылку
+        List<WebElement> links = driver.findElements(By.tagName("a"));
         links.get(8).click();
 
         // Либо так:
-        // WebElement linkTo8th = ChromeForHomework1.findElement(By.linkText("Digest Authentication"));
+        // WebElement linkTo8th = driver.findElement(By.linkText("Digest Authentication"));
         // linkTo8th.click();
 
-
         //Отработка алерта
-        ChromeForHomework1.get("https://the-internet.herokuapp.com/");
-        WebElement linkToAlerts = ChromeForHomework1.findElement(By.linkText("JavaScript Alerts"));
+        driver.get("https://the-internet.herokuapp.com/");
+        WebElement linkToAlerts = driver.findElement(By.linkText("JavaScript Alerts"));
         linkToAlerts.click();
 
-        WebElement jsAlert = ChromeForHomework1.findElement(By.cssSelector("button[onclick^=\"jsAlert\"]"));
+        WebElement jsAlert = driver.findElement(By.cssSelector("button[onclick^=\"jsAlert\"]"));
         jsAlert.click();
 
-        Alert alert = ChromeForHomework1.switchTo().alert();
+        Alert alert = driver.switchTo().alert();
         String alertText = alert.getText();
         Assert.assertEquals(alertText, "I am a JS Alert");
         alert.accept();
 
         //Отработка алерта типа Confirm
-        WebElement jsConfirm = ChromeForHomework1.findElement(By.cssSelector("button[onclick^=\"jsConfirm\"]"));
+        WebElement jsConfirm = driver.findElement(By.cssSelector("button[onclick^=\"jsConfirm\"]"));
         jsConfirm.click();
 
         String alertText2 = alert.getText();
@@ -46,16 +53,40 @@ public class HerokuappTestNG {
         alert.dismiss();
 
         //Отработка алерта типа Prompt
-        WebElement jsPrompt = ChromeForHomework1.findElement(By.cssSelector("button[onclick^=\"jsPrompt\"]"));
+        WebElement jsPrompt = driver.findElement(By.cssSelector("button[onclick^=\"jsPrompt\"]"));
         jsPrompt.click();
 
         String alertText3 = alert.getText();
         Assert.assertEquals(alertText3, "I am a JS prompt");
         alert.sendKeys("Ok");
         alert.accept();
+    }
 
-        ChromeForHomework1.quit();
+    @Test
+    public void framesTraining() {
+        WebElement framesLink = driver.findElement(By.linkText("Frames"));
+        framesLink.click();
+        WebElement iFrameLink = driver.findElement(By.linkText("iFrame"));
+        iFrameLink.click();
+        driver.switchTo().frame("mce_0_ifr");
+        WebElement frameInput = driver.findElement(By.cssSelector(".mce-content-body"));
+        Actions action = new Actions(driver);
+        action.moveToElement(frameInput);
+        //action.sendKeys(Keys.CONTROL+"A"); //Не получается почему-то выделить всё и удалить
+        //action.sendKeys(Keys.DELETE);
+        frameInput.sendKeys("Hello, I'm a text about nothing");
+        driver.switchTo().defaultContent();
+        WebElement centerText = driver.findElement(By.cssSelector("[title=\"Align center\"]")); // Проверим, что вышли из рамки
+        centerText.click();
 
     }
 
-}
+        @AfterTest
+        public void teardown() {
+            //driver.quit();
+        }
+
+
+    }
+
+
