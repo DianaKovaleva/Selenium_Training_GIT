@@ -18,6 +18,11 @@ public class HerokuappTestNG {
         driver.manage().window().maximize();
     }
 
+    @BeforeMethod
+    public void browserOpening() {
+        driver.get("https://the-internet.herokuapp.com/");
+    }
+
     @Test
     public void click8thElement() {
 
