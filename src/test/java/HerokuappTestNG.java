@@ -1,61 +1,105 @@
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.Test;
-
+import org.testng.annotations.*;
 import java.util.List;
+import static org.openqa.selenium.Keys.CONTROL;
+import static org.openqa.selenium.Keys.DELETE;
 
 public class HerokuappTestNG {
 
+    WebDriver driver;
+
+    @BeforeTest
+    public void setup() {
+        System.setProperty("webdriver.chrome.driver", "C:\\WebDrivers\\chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.get("https://the-internet.herokuapp.com/");
+        driver.manage().window().maximize();
+    }
+
+    @BeforeMethod
+    public void browserOpening() {
+        driver.get("https://the-internet.herokuapp.com/");
+    }
+
     @Test
-    public void TestNG() {
-        System.setProperty("webdriver.chrome.driver",
-                "C:\\WebDrivers\\chromedriver.exe");
-        WebDriver ChromeForHomework1 = new ChromeDriver();
-        ChromeForHomework1.get("https://the-internet.herokuapp.com/");
-        List<WebElement> links = ChromeForHomework1.findElements(By.tagName("a"));
-        links.get(8).click();
+    public void click8thElement() {
+
+        // Задание - кликнуть на 8ую ссылку
+        //List<WebElement> links = driver.findElements(By.tagName("a"));
+        //links.get(8).click();
 
         // Либо так:
-        // WebElement linkTo8th = ChromeForHomework1.findElement(By.linkText("Digest Authentication"));
-        // linkTo8th.click();
+         WebElement linkTo8th = driver.findElement(By.linkText("Digest Authentication"));
+         linkTo8th.click();
+    }
 
-
-        //Отработка алерта
-        ChromeForHomework1.get("https://the-internet.herokuapp.com/");
-        WebElement linkToAlerts = ChromeForHomework1.findElement(By.linkText("JavaScript Alerts"));
+    @Test
+    public void jsAlert() {
+        WebElement linkToAlerts = driver.findElement(By.cssSelector("a[href=\"/javascript_alerts\"]"));
         linkToAlerts.click();
 
-        WebElement jsAlert = ChromeForHomework1.findElement(By.cssSelector("button[onclick^=\"jsAlert\"]"));
+        WebElement jsAlert = driver.findElement(By.cssSelector("button[onclick^=\"jsAlert\"]"));
         jsAlert.click();
 
-        Alert alert = ChromeForHomework1.switchTo().alert();
+        Alert alert = driver.switchTo().alert();
         String alertText = alert.getText();
         Assert.assertEquals(alertText, "I am a JS Alert");
         alert.accept();
+    }
 
-        //Отработка алерта типа Confirm
-        WebElement jsConfirm = ChromeForHomework1.findElement(By.cssSelector("button[onclick^=\"jsConfirm\"]"));
+    @Test
+    public void confirmAlert() {
+        WebElement linkToAlerts = driver.findElement(By.cssSelector("a[href=\"/javascript_alerts\"]"));
+        linkToAlerts.click();
+
+        WebElement jsConfirm = driver.findElement(By.cssSelector("button[onclick^=\"jsConfirm\"]"));
         jsConfirm.click();
 
+        Alert alert = driver.switchTo().alert();
         String alertText2 = alert.getText();
         Assert.assertEquals(alertText2, "I am a JS Confirm");
         alert.dismiss();
+    }
 
-        //Отработка алерта типа Prompt
-        WebElement jsPrompt = ChromeForHomework1.findElement(By.cssSelector("button[onclick^=\"jsPrompt\"]"));
+    @Test
+    public void promptAlert() {
+        WebElement linkToAlerts = driver.findElement(By.cssSelector("a[href=\"/javascript_alerts\"]"));
+        linkToAlerts.click();
+
+        WebElement jsPrompt = driver.findElement(By.cssSelector("button[onclick^=\"jsPrompt\"]"));
         jsPrompt.click();
 
+        Alert alert = driver.switchTo().alert();
         String alertText3 = alert.getText();
         Assert.assertEquals(alertText3, "I am a JS prompt");
         alert.sendKeys("Ok");
         alert.accept();
+    }
 
-        ChromeForHomework1.quit();
+    @Test
+    public void framesTraining() {
+        WebElement framesLink = driver.findElement(By.linkText("Frames"));
+        framesLink.click();
+        WebElement iFrameLink = driver.findElement(By.linkText("iFrame"));
+        iFrameLink.click();
+        driver.switchTo().frame("mce_0_ifr");
+        WebElement frameInput = driver.findElement(By.cssSelector(".mce-content-body"));
+        frameInput.sendKeys(Keys.chord(CONTROL, "A"));
+        frameInput.sendKeys(Keys.chord(DELETE));
+        frameInput.sendKeys("Hello, I'm a text about nothing");
+        driver.switchTo().defaultContent();
+        WebElement centerText = driver.findElement(By.cssSelector("[title=\"Align center\"]")); // Проверим, что вышли из рамки
+        centerText.click();
+    }
+
+    @AfterTest
+    public void teardown() {
+        driver.quit();
+    }
+
 
     }
 
-}
+
