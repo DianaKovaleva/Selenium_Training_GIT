@@ -1,5 +1,6 @@
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -32,6 +33,9 @@ public class BelhardSite {
         webdriver.close();
 
         webdriver.switchTo().window(initialTab);
+
+        String initialTabTitle = webdriver.getTitle();
+        Assert.assertEquals(initialTabTitle, "Трудоустройство Академии BELHARD");
 
     }
 

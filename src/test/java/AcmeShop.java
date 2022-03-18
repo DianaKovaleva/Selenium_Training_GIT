@@ -5,13 +5,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
+import static org.testng.Assert.assertEquals;
+
 
 public class AcmeShop {
     WebDriver webdriver;
@@ -29,25 +30,29 @@ public class AcmeShop {
     @Test
     public void ducksShopHeaders() {  // Проверка переходов по пунктам меню
 
+        SoftAssert softAssert = new SoftAssert();
+
         WebElement rubberDucksHeader = webdriver.findElement(By.cssSelector("#site-menu-wrapper .category-1"));
         rubberDucksHeader.click();
         String rubberDucksHeaderTitle = webdriver.getTitle();
-        Assert.assertEquals(rubberDucksHeaderTitle, "Rubber Ducks | My Store1");
+        softAssert.assertEquals(rubberDucksHeaderTitle, "Rubber Ducks | My Store1");
 
         WebElement deliveryInformationHeader = webdriver.findElement(By.cssSelector("#site-menu-wrapper .page-2"));
         deliveryInformationHeader.click();
         String deliveryInformationHeaderTitle = webdriver.getTitle();
-        Assert.assertEquals(deliveryInformationHeaderTitle, "Delivery Information | My Store1");
+        softAssert.assertEquals(deliveryInformationHeaderTitle, "Delivery Information | My Store1");
 
         WebElement termsConditionsHeader = webdriver.findElement(By.cssSelector("#site-menu-wrapper .page-4"));
         termsConditionsHeader.click();
         String termsConditionsHeaderTitle = webdriver.getTitle();
-        Assert.assertEquals(termsConditionsHeaderTitle, "Terms & Conditions | My Store1");
+        softAssert.assertEquals(termsConditionsHeaderTitle, "Terms & Conditions | My Store1");
 
         WebElement homeHeader = webdriver.findElement(By.cssSelector("#site-menu-wrapper .general-0"));
         homeHeader.click();
         String homeHeaderTitle = webdriver.getTitle();
-        Assert.assertEquals(homeHeaderTitle, "Online Store | My Store1");
+        softAssert.assertEquals(homeHeaderTitle, "Online Store | My Store1");
+
+        softAssert.assertAll();
 
     }
 
@@ -79,34 +84,28 @@ public class AcmeShop {
             //Нажимаем на Update
         WebElement updateButton = webdriver.findElement(By.name("update_cart_item"));
         updateButton.click();
-
-        Thread.sleep(2000);
+        wait.until(ExpectedConditions.stalenessOf(webdriver.findElement(By.cssSelector("input[type=\"number\"]"))));
 
             //Проверяем, отобразилось ли в корзине правильное количество(3)
         WebElement cartQuantity = webdriver.findElement(By.cssSelector("input[type=\"number\"]"));
         String quantityFact = cartQuantity.getAttribute("value");
-        Assert.assertEquals(quantityFact, "3");
+        assertEquals(quantityFact, "3");
 
             //Проверяем, отобразилось ли правильное количество(3) в таблице ниже
         WebElement gridQuantity = webdriver.findElement(By.cssSelector("td[style=\"text-align: center;\"]"));
         String quantityGrid = gridQuantity.getText();
-        Assert.assertEquals(quantityGrid, "3");
-
-            // Для тренировки DragAndDrop перетянем изображение уточки в поле комментария (появится url в нем)
-        //WebElement duckInCart = webdriver.findElement(By.cssSelector("img[src*=\"fwb.png\"]"));
-        //WebElement field1 = webdriver.findElement(By.cssSelector("textarea[name=\"comments\"]"));
-        //Actions builder3 = new Actions(webdriver);
-        //builder3.dragAndDrop(duckInCart, field1).perform(); //Почему-то не проходит, хотя вручную перетаскивается
+        assertEquals(quantityGrid, "3");
 
 
-            // Тут я хотела увеличить высоту поля комментария в 5 раз, погуглила примерно, но не увеличивается
-            Actions builder4 = new Actions(webdriver);
-            WebElement fieldComments = webdriver.findElement(By.cssSelector("textarea[name=\"comments\"]"));
-            int height = fieldComments.getSize().height;
-            int width = fieldComments.getSize().width;
-            builder4.moveToElement(fieldComments, width, height).clickAndHold().moveByOffset(0, height*5)
-                    .release().build();
-            builder4.perform();
+        // Всё равно не увеличивается
+        WebElement fieldComments = webdriver.findElement(By.cssSelector("textarea[name=\"comments\"]"));
+        int height = fieldComments.getSize().height;
+        int width = fieldComments.getSize().width;
+        builder2.moveToElement(fieldComments, ((width/2)-3), ((height/2)-3)).clickAndHold().moveByOffset(0, 15)
+                .release().build();
+        builder2.perform();
+        int height2 = fieldComments.getSize().height;
+        //Assert.assertNotEquals(height, height2);  //закоментила, чтобы не падал весь метод
     }
 
         @Test //Сортировка
@@ -141,7 +140,7 @@ public class AcmeShop {
         forNamesComparison.add("Yellow Duck");
         forNamesComparison.add("Розовая уточка");
 
-        Assert.assertEquals(allNames, forNamesComparison);
+        assertEquals(allNames, forNamesComparison);
 
         //Сортировка по цене
         WebElement priceButton = webdriver.findElement(By.linkText("Price"));
@@ -174,7 +173,7 @@ public class AcmeShop {
             result = "Not Sorted";
         }
 
-        Assert.assertEquals(result, "Sorted");
+        assertEquals(result, "Sorted");
         }
 
         @Test //Проверка соответствия лэйблов
@@ -188,17 +187,17 @@ public class AcmeShop {
         WebElement greenDuckLabel = webdriver.findElement(By.
                 cssSelector(".link[href=\"https://litecart.stqa.ru/en/rubber-ducks-c-1/subcategory-c-2/green-duck-p-2\"] div[class*=\"sticker\"]"));
         String greenDuckLabelString = greenDuckLabel.getText();
-        Assert.assertEquals(greenDuckLabelString, "NEW");
+        assertEquals(greenDuckLabelString, "NEW");
 
         WebElement pinkDuckLabel = webdriver.findElement(By.
                 cssSelector(".link[href=\"https://litecart.stqa.ru/en/rubber-ducks-c-1/subcategory-c-2/rozovaya-utochka-p-6\"] div[class*=\"sticker\"]"));
         String pinkDuckLabelString = pinkDuckLabel.getText();
-        Assert.assertEquals(pinkDuckLabelString, "NEW");
+        assertEquals(pinkDuckLabelString, "NEW");
 
         WebElement yellowDuckLabel = webdriver.findElement(By.
                 cssSelector(".link[href=\"https://litecart.stqa.ru/en/rubber-ducks-c-1/subcategory-c-2/yellow-duck-p-1\"] div[class*=\"sticker\"]"));
         String yellowDuckLabelString = yellowDuckLabel.getText();
-        Assert.assertEquals(yellowDuckLabelString, "SALE");
+        assertEquals(yellowDuckLabelString, "SALE");
 
     }
 
