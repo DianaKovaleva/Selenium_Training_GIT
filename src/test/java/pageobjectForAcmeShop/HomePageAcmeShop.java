@@ -4,22 +4,13 @@ import org.openqa.selenium.*;
 import static org.openqa.selenium.Keys.ENTER;
 
 public class HomePageAcmeShop {
-    //Неработающее считывание с пропертиз пока закоментила
-    //private By homeHeaderLocator = Locators.getLocator("HomePageAcmeShop.homeHeader");
-    //private By rubberDucksHeaderLocator = Locators.getLocator("HomePageAcmeShop.rubberDucksHeader");
-    //private By deliveryInformationHeaderLocator = Locators.getLocator("HomePageAcmeShop.deliveryInformationHeader");
-    //private By termsConditionsHeaderLocator = Locators.getLocator("HomePageAcmeShop.termsConditionsHeader");
-    //private By redDuckLocator = Locators.getLocator("HomePageAcmeShop.redDuck");
-    //private By subcategoryLocator = Locators.getLocator("HomePageAcmeShop.subcategory");
-    //private By queryLocator = Locators.getLocator("HomePageAcmeShop.query");
-
-    private By homeHeaderLocator = By.cssSelector("#site-menu-wrapper .general-0");
-    private By rubberDucksHeaderLocator = By.cssSelector("#site-menu-wrapper .category-1");
-    private By deliveryInformationHeaderLocator = By.cssSelector("#site-menu-wrapper .page-2");
-    private By termsConditionsHeaderLocator = By.cssSelector("#site-menu-wrapper .page-4");
-    private By redDuckLocator = By.cssSelector(".link[title=\"Red Duck\"]");
-    private By subcategoryLocator = By.linkText("Subcategory");
-    private By queryLocator = By.name("query");
+    private By homeHeaderLocator = Locators.getLocator("HomePageAcmeShop.homeHeader");
+    private By rubberDucksHeaderLocator = Locators.getLocator("HomePageAcmeShop.rubberDucksHeader");
+    private By deliveryInformationHeaderLocator = Locators.getLocator("HomePageAcmeShop.deliveryInformationHeader");
+    private By termsConditionsHeaderLocator = Locators.getLocator("HomePageAcmeShop.termsConditionsHeader");
+    private By redDuckLocator = Locators.getLocator("HomePageAcmeShop.redDuck");
+    private By subcategoryLocator = Locators.getLocator("HomePageAcmeShop.subcategory");
+    private By queryLocator = Locators.getLocator("HomePageAcmeShop.query");
 
     private final WebDriver driver;
 

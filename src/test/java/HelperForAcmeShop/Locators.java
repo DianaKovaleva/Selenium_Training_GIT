@@ -10,7 +10,7 @@ public class Locators {
 
     static {
         locators = new Properties();
-        InputStream is = Locators.class.getResourceAsStream("AcmeLocators.properties");
+        InputStream is = Locators.class.getResourceAsStream("/AcmeLocators.properties");
         try {
             locators.load(is);
         } catch (Exception e) {

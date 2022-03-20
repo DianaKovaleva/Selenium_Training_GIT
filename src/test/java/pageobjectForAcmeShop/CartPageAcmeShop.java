@@ -10,14 +10,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.testng.Assert.assertEquals;
 
 public class CartPageAcmeShop {
-    //Неработающее считывание с пропертиз пока закоментила
-    //private By quantityInCartLocator = Locators.getLocator("CartPageAcmeShop.quantityInCart");
-    //private By quantityInGridLocator = Locators.getLocator("CartPageAcmeShop.quantityInGrid");
-    //private By updateInCartLocator = Locators.getLocator("CartPageAcmeShop.updateInCart");
-
-    private By quantityInCartLocator = By.cssSelector("input[type=\"number\"]");
-    private By quantityInGridLocator = By.cssSelector("td[style=\"text-align: center;\"]");
-    private By updateInCartLocator = By.name("update_cart_item");
+    private By quantityInCartLocator = Locators.getLocator("CartPageAcmeShop.quantityInCart");
+    private By quantityInGridLocator = Locators.getLocator("CartPageAcmeShop.quantityInGrid");
+    private By updateInCartLocator = Locators.getLocator("CartPageAcmeShop.updateInCart");
 
     private final WebDriver driver;
 
